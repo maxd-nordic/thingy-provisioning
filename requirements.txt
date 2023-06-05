@@ -1,0 +1,9 @@
+# labelgenerator
+qrcode==7.4.2
+lxml==4.9.0
+
+# nrfcredstore
+pyserial==3.5
+
+# pyinstaller
+pyinstaller==5.11.0

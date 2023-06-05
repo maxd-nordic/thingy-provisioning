@@ -1,0 +1,3 @@
+[submodule "nrfcredstore"]
+	path = nrfcredstore
+	url = https://github.com/maxd-nordic/nrfcredstore
