@@ -38,7 +38,7 @@ def generate_qr_code_node(url, x, y, height, width):
 	image_stream = io.BytesIO()
 
 	# Save the image to the byte stream as PNG
-	image.save(image_stream, format="PNG")
+	image.save(image_stream)
 
 	# Get the byte stream value as a string
 	image_stream.seek(0)
@@ -54,7 +54,7 @@ def generate_qr_code_node(url, x, y, height, width):
 allowed_characters = b"abcdefghijkmnpqrstuvwxyz23456789"
 base_url = "https://solar.thingy.rocks"
 imei_template = "123456789012345"
-url_template = "https://solar.thingy.rocks/2a.7deak2"
+fingerprint_template = "1.7deak2"
 
 parser = argparse.ArgumentParser(description='Generate Fingerprint and Label')
 parser.add_argument('production_run', help='hex string unique to this production run, e.g. "3"')
@@ -82,7 +82,7 @@ layer.replace(rect, qr_code_node)
 
 tree_str = lxml.etree.tostring(tree).decode("ASCII")
 tree_str = tree_str.replace(imei_template, args.imei)
-tree_str = tree_str.replace(url_template, url)
+tree_str = tree_str.replace(fingerprint_template, fingerprint)
 
 with open(f"label-{args.imei}.svg", "w") as f:
 	f.write(tree_str)
