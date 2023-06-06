@@ -1,5 +1,4 @@
 #!/bin/bash
-#TODO: untested
 
 set -e
 CN="Production Run Test"
@@ -12,13 +11,6 @@ if [ ! -n "$1" ]; then
     echo "Error: Please provide Serial port, for example /dev/serial/by-id/usb-Nordic*-if00"
     exit 1
 fi
-
-
-if [ -n "$1" ]
-  then
-    echo "Error: Please provide Serial port, for example /dev/serial/by-id/usb-Nordic*-if00"
-fi
-
 
 if [ ! -d "./certificates" ]; then
 	mkdir ./certificates
@@ -65,11 +57,11 @@ nrfcredstore "$1" write 42 CLIENT_CERT "./certificates/device.$deviceID.signed.c
 SignedCert=$(< "./certificates/device.${deviceID}.signed.cert")
 SignedCert=${SignedCert//$'\n'/\\n}    # Replace line breaks
 
-Code=$(generate_label "$RunID" "$IMEI" "./label_template.svg")
+Code=$(generate_label.py "$RunID" "$IMEI" "labelgenerator/label_template.svg")
 Code=${Code//$'\n'/\\n}    # Replace line breaks
 
 echo "$IMEI;\"$Code\";\"$SignedCert\"" >> "$deviceDB"
 
 nrfcredstore "$1" list | grep "42 "
 
-# openssl x509 -text -noout -in ./certificates/device.${deviceID}.signed.cert
+inkscape -d 600 -e "./label-$IMEI.png" "./label-$IMEI.svg"
