@@ -7,8 +7,8 @@ deviceDB="./device.csv"
 RunID="1"
 PATH=$PATH:$PWD/labelgenerator
 
-if [ ! -n "$1" ]; then
-    echo "Error: Please provide Serial port, for example /dev/serial/by-id/usb-Nordic*-if00"
+if [ ! -n "$2" ]; then
+    echo "Error: Please provide Serial port and device PIN, for example /dev/serial/by-id/usb-Nordic*-if00 123456"
     exit 1
 fi
 
@@ -29,13 +29,14 @@ fi
 
 if [ ! -f $deviceDB ]
   then
-    echo "IMEI;Fingerprint;SignedCert" >> $deviceDB
+    echo "IMEI;PIN;Fingerprint;SignedCert" >> $deviceDB
 fi
 
 # Fetch IMEI
 IMEI=$(nrfcredstore "$1" imei)
 # Prefix IMEI so it can be distinguished from user devices
 deviceID="oob-${IMEI}"
+PIN=$2
 
 # Clear previous client key/cert and suppress error messages
 nrfcredstore "$1" delete 42 CLIENT_CERT
@@ -60,7 +61,7 @@ SignedCert=${SignedCert//$'\n'/\\n}    # Replace line breaks
 Code=$(generate_label.py "$RunID" "$IMEI" "labelgenerator/label_template.svg")
 Code=${Code//$'\n'/\\n}    # Replace line breaks
 
-echo "$IMEI;\"$Code\";\"$SignedCert\"" >> "$deviceDB"
+echo "$IMEI;$PIN;\"$Code\";\"$SignedCert\"" >> "$deviceDB"
 
 nrfcredstore "$1" list | grep "42 "
 

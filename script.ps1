@@ -6,8 +6,8 @@ $env:OPENSSL_CONF = "$env:OPENSSL_HOME\ssl\openssl.cnf"
 $env:PATH = "$PWD;$env:OPENSSL_HOME\bin;$env:env:PATH"
 $deviceDB = "$PWD\device.csv"
 
-if ($args.Length -ne 1) {
-    Write-Host "Error: Please provide Serial port, for example COM6"
+if ($args.Length -ne 2) {
+    Write-Host "Error: Please provide Serial port and device PIN, for example COM6 123456"
     exit 1
 }
 
@@ -37,7 +37,7 @@ else {
 
 if (-not (Test-Path $deviceDB)) {
     New-Item -ItemType File -Path $deviceDB -Force
-    Add-Content -Path $deviceDB -Value "IMEI;Fingerprint;SignedCert"
+    Add-Content -Path $deviceDB -Value "IMEI;PIN;Fingerprint;SignedCert"
     Write-Host "File created: $deviceDB"
 }
 
@@ -45,6 +45,7 @@ if (-not (Test-Path $deviceDB)) {
 $IMEI = & nrfcredstore $args[0] imei
 # Prefix IMEI so it can be distinguished from user devices
 $deviceID = "oob-$IMEI"
+$PIN = $args[1]
 
 # Clear previous client key/cert and suppress error messages
 & nrfcredstore $args[0] delete 42 CLIENT_CERT | out-null
@@ -77,6 +78,6 @@ $Code = $Code-replace "`r`n", ""  # Replace Windows-style line breaks
 CheckLastExitCode
 
 # add line to DB file
-Add-Content -Path $deviceDB -Value "$IMEI;`"$Code`";`"$SignedCert`""
+Add-Content -Path $deviceDB -Value "$IMEI;$PIN;`"$Code`";`"$SignedCert`""
 
 & nrfcredstore $args[0] list | Select-String -Pattern "^42 "
