@@ -58,7 +58,7 @@ nrfcredstore "$1" write 42 CLIENT_CERT "./certificates/device.$deviceID.signed.c
 SignedCert=$(< "./certificates/device.${deviceID}.signed.cert")
 SignedCert=${SignedCert//$'\n'/\\n}    # Replace line breaks
 
-Code=$(generate_label.py "$RunID" "$IMEI" "labelgenerator/label_template.svg")
+Code=$(generate_label.py "$RunID" "$PIN" "$IMEI" "labelgenerator/label_template.svg")
 Code=${Code//$'\n'/\\n}    # Replace line breaks
 
 echo "$IMEI;$PIN;\"$Code\";\"$SignedCert\"" >> "$deviceDB"

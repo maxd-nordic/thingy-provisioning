@@ -23,16 +23,20 @@
    <text
        style="font-family:Consolas;fill:#000000;fill-opacity:1">
        <tspan
+         xml:space="preserve"
+         x="16"
+         y="9.0"
+         style="font-size:2.8px">PIN:  <tspan style="font-weight:bold">654321</tspan>
+      </tspan>
+       <tspan
          x="16"
          y="11.5"
-         style="font-size:2.8px">
-            IMEI: <tspan style="font-weight:bold">123456789012345</tspan>
+         style="font-size:2.8px">IMEI: <tspan style="font-weight:bold">123456789012345</tspan>
       </tspan>
       <tspan
          x="16"
          y="14"
-         style="font-size:2.1px;"
-         >solar.thingy.rocks/<tspan style="font-weight:bold;">1.7deak2</tspan></tspan>
+         style="font-size:2.1px;">hello.nrfcloud.com/<tspan style="font-weight:bold;">1.7deak2</tspan></tspan>
    </text>
   </g>
 </svg>

@@ -71,7 +71,7 @@ $SignedCert = Get-Content -Path "./certificates/device.$deviceID.signed.cert" | 
 $SignedCert = $SignedCert -replace "`r`n", "\n"  # Replace Windows-style line breaks
 $SignedCert = $SignedCert -replace "`n", "\n"    # Replace Unix-style line breaks
 
-$Code = generate_label $RunID $IMEI "./label_template.svg" | Out-String
+$Code = generate_label $RunID $IMEI $PIN "./label_template.svg" | Out-String
 CheckLastExitCode
 $Code = $Code-replace "`r`n", ""  # Replace Windows-style line breaks
 .\InkscapePortable\App\Inkscape\bin\inkscape.com -d 600 -o "./label-$IMEI.png" "./label-$IMEI.svg"
