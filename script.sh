@@ -65,4 +65,7 @@ echo "$IMEI;$PIN;\"$Code\";\"$SignedCert\"" >> "$deviceDB"
 
 nrfcredstore "$1" list | grep "42 "
 
-inkscape -d 600 -e "./label-$IMEI.png" "./label-$IMEI.svg"
+SignedCert=$(< "./certificates/device.${deviceID}.signed.cert")
+echo "${deviceID},,,APP|MODEM|BOOTLOADER,\"${SignedCert}\"" > provisionreq.csv
+
+curl -X POST https://api.nrfcloud.com/v1/devices --data-binary @provisionreq.csv -H "Content-Type: application/octet-stream" -H "Authorization: Bearer $API_KEY"
